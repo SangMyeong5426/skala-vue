@@ -123,6 +123,9 @@ src/
 | Hands on 1       | `WeatherMockup.vue`    | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                 |
 | Hands on 1       | `WeatherMockup.vue`    | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                    |
 | Hands on 1       | `WeatherMockup.vue`    | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                        |
+| Hands on 1       | `WeatherMockup.vue`    | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                |
+| Hands on 1       | `WeatherMockup.vue`    | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                         |
+| Hands on 1       | `WeatherMockup.vue`    | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                 |
 
 ## 배포
 
