@@ -94,6 +94,12 @@ const showDetail = (cityName, status) => {
 </template>
 
 <style scoped>
+/* practice.css와 exercise.css의 전역 input 규칙이 서로 덮어쓰므로,
+   과제 검색창 크기는 컴포넌트 scoped 규칙으로 고정한다 */
+.search-box input {
+  width: 90%;
+  padding: 8px;
+}
 /* 커스터마이징: 선택된 카드 강조 (v-bind:class 객체 구문 활용) */
 .weather-card.selected {
   border-color: #3498db;
