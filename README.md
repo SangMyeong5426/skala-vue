@@ -1,44 +1,112 @@
-# skala-vue-my
+# skala-vue
 
-This template should help get you started developing with Vue 3 in Vite.
+SKALA Full-Stack Engineering — **Frontend framework: Vue.js** 과정 실습 저장소입니다.
 
-## Recommended IDE Setup
+Vue 3 (Composition API) + Vite 기반이며, 단원별 실습 컴포넌트를 `App.vue`에 조립해
+한 화면에서 확인하는 구조입니다.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- **개발자**: 박상명
+- **원본 과정 자료**: https://github.com/bottletiger/skala-vue
 
-## Recommended Browser Setup
+## 기술 스택
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+| 구분       | 사용 기술                                   |
+| ---------- | ------------------------------------------- |
+| 프레임워크 | Vue 3.5 (Composition API, `<script setup>`) |
+| 빌드 도구  | Vite 8                                      |
+| 라우팅     | Vue Router 5                                |
+| 상태 관리  | Pinia 3                                     |
+| 코드 품질  | ESLint 10 + Oxlint + Prettier               |
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
+## 실행 방법
 
 ```sh
-npm run dev
+npm install       # 의존성 설치
+npm run dev       # 개발 서버 (http://localhost:5173)
+npm run build     # 프로덕션 빌드 → dist/
+npm run lint      # Oxlint + ESLint 정적 검사
+npm run format    # Prettier 코드 포맷팅
 ```
 
-### Compile and Minify for Production
+## 프로젝트 구조
 
-```sh
-npm run build
+```
+src/
+├── main.js                       # 앱 진입점 (Pinia, Router 등록)
+├── App.vue                       # 루트 컴포넌트 — 실습 컴포넌트 조립
+├── assets/
+│   └── practice.css              # 실습 공통 스타일
+├── components/
+│   └── practices/
+│       └── basic/                # 단원별 실습 컴포넌트
+├── router/                       # 라우팅 정의
+├── stores/                       # Pinia 스토어
+└── views/                        # 페이지 단위 컴포넌트
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+## 실습 진행 현황
 
-```sh
-npm run lint
-```
+### 1. 학습환경구성
+
+| 컴포넌트        | 학습 내용                              |
+| --------------- | -------------------------------------- |
+| `SampleOne.vue` | 반응형 데이터(`ref`) vs 일반 변수 비교 |
+| `SampleTwo.vue` | Text Interpolation과 JavaScript 표현식 |
+
+### 2. Vue Directive
+
+| 컴포넌트               | 학습 내용                                        |
+| ---------------------- | ------------------------------------------------ |
+| `VueHtml.vue`          | `v-html` — 문자열을 실제 HTML로 렌더링           |
+| `VueHtmlXss.vue`       | `v-html`의 XSS 취약점 재현                       |
+| `VueText.vue`          | `v-text` — `innerText` 방식 출력                 |
+| `VueBind.vue`          | `v-bind` 기본 (`:href`, `:src`, `:disabled`)     |
+| `VueBindClass.vue`     | 클래스 바인딩 (객체 / 배열 구문)                 |
+| `VueBindStyle.vue`     | 인라인 스타일 바인딩 (객체 / 배열 구문)          |
+| `VueBindShorthand.vue` | Vue 3.4+ same-name shorthand (`:src`)            |
+| `VueIf.vue`            | `v-if` / `v-else-if` / `v-else` 조건부 렌더링    |
+| `VueShow.vue`          | `v-show` — `display: none` 기반 표시 토글        |
+| `VueFor.vue`           | `v-for` — 배열 / 객체 / 배열 내 객체 반복 렌더링 |
+| `VuePre.vue`           | `v-pre` — 템플릿 컴파일 생략                     |
+| `VueCloak.vue`         | `v-cloak` — 렌더링 전 템플릿 노출 방지           |
+| `VueOnce.vue`          | `v-once` — 최초 1회만 렌더링                     |
+| `VueMemo.vue`          | `v-memo` — 의존성 기반 렌더링 캐싱               |
+
+### 3. Vue Event Handling
+
+| 컴포넌트            | 학습 내용                                 |
+| ------------------- | ----------------------------------------- |
+| `EventBasic.vue`    | `v-on`(`@`) 인라인 핸들러 / 메서드 핸들러 |
+| `EventObject.vue`   | 이벤트 객체(`$event`) 수신 패턴 2가지     |
+| `EventModifier.vue` | 이벤트 수식어 `.prevent`, `.stop`         |
+
+### 4. Vue Form Handling
+
+| 컴포넌트            | 학습 내용                                                   |
+| ------------------- | ----------------------------------------------------------- |
+| `ModelBasic.vue`    | `v-model` 양방향 바인딩과 내부 동작 원리                    |
+| `ModelForm.vue`     | Form 요소별 `v-model` 매핑 (textarea/checkbox/radio/select) |
+| `ModelModifier.vue` | `v-model` 수식어 `.lazy`, `.number`, `.trim` 및 체이닝      |
+
+### 5. Vue Style
+
+| 컴포넌트          | 학습 내용                                       |
+| ----------------- | ----------------------------------------------- |
+| `StyleScoped.vue` | `<style scoped>` 적용 범위와 외부 CSS `@import` |
+
+## 개인 Customization 내역
+
+과정 자료의 기본 예제에서 추가·변경한 내용을 기록합니다.
+
+| 단원             | 대상        | 변경 내용                                                                                       |
+| ---------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| 2. Vue Directive | `VueIf.vue` | 성적 등급 분기에 **A+ 학점(95점 이상)** 조건을 추가하여 `v-else-if` 체인을 4단계 → 5단계로 확장 |
+
+## 배포
+
+> 배포 완료 후 URL을 기재합니다.
+
+## 라이선스 및 출처
+
+본 저장소는 SKALA 교육 과정 실습 목적으로 작성되었습니다.
+교육 자료의 저작권은 SK주식회사 AX에 있습니다.
