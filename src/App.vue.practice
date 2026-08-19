@@ -1,0 +1,20 @@
+<script setup>
+/**
+ * [비활성 파일] 단원별 실습 화면
+ *
+ * 사용하려면 이 파일의 내용을 App.vue 에 덮어쓴다.
+ *   cp src/App.vue.practice src/App.vue
+ *
+ * 과제 화면으로 되돌리려면 App.vue.exercise 의 내용을 App.vue 에 덮어쓴다.
+ */
+import PracticeView from './views/PracticeView.vue'
+</script>
+
+<template>
+  <PracticeView />
+</template>
+
+<style>
+/* 실습 화면 전용 스타일 */
+@import '@/assets/practice.css';
+</style>
