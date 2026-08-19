@@ -105,10 +105,18 @@ const handleSearchInput = (e) => {
   searchQuery.value = e.target.value
 }
 
+// 커스터마이징: 도시명 끝 글자의 받침 유무로 주격 조사('이'/'가')를 판별
+// 한글 음절 코드에서 (코드 - 0xAC00) % 28 이 0이면 받침이 없다
+const getSubjectJosa = (word) => {
+  const lastCode = word.charCodeAt(word.length - 1)
+  if (lastCode < 0xac00 || lastCode > 0xd7a3) return '이' // 한글이 아니면 기본값
+  return (lastCode - 0xac00) % 28 === 0 ? '가' : '이'
+}
+
 // [요구사항 4] 카드 클릭 시 상태바 갱신 + 주간 예보 대상 도시 선택
 const selectCard = (city) => {
   selectedCityId.value = city.id
-  statusMessage.value = `${city.name}이(가) 선택되었습니다.`
+  statusMessage.value = `${city.name}${getSubjectJosa(city.name)} 선택되었습니다.`
 }
 
 // [요구사항 4] 상세보기 버튼 클릭 시 알림창 (@click.stop으로 카드 클릭 이벤트 버블링 차단)
@@ -162,7 +170,7 @@ const showDetail = (cityName, status) => {
     <!-- [요구사항 5-A] 커스터마이징 Mockup: 대기질(미세먼지) 현황 -->
     <section class="list-box">
       <h3>🌫️ 대기질 현황 (미세먼지 PM10)</h3>
-      <div v-for="city in weatherList" :key="`air-${city.id}`" class="air-row">
+      <div v-for="city in weatherList" :key="city.id" class="air-row">
         <span class="air-city">{{ city.name }}</span>
         <span class="air-value">{{ city.pm10 }}㎍/㎥</span>
 
@@ -182,7 +190,7 @@ const showDetail = (cityName, status) => {
            선택된 도시만 렌더링하기 위해 template에 v-for, 내부 요소에 v-if를 건다.
            (같은 요소에 v-for와 v-if를 함께 쓰면 v-if가 먼저 평가되어 city를 못 읽는다)
            ※ 2일차에 computed로 선택 도시를 추출하는 방식으로 리팩터링 예정 -->
-      <template v-for="city in weatherList" :key="`fc-${city.id}`">
+      <template v-for="city in weatherList" :key="city.id">
         <div v-if="selectedCityId === city.id">
           <p class="forecast-title">{{ city.name }}의 5일 예보</p>
           <ul class="forecast-list">
