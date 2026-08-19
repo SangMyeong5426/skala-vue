@@ -34,6 +34,14 @@ import ModelModifier from './components/practices/basic/ModelModifier.vue'
 
 // 5. Vue Style Handling
 import StyleScoped from './components/practices/basic/StyleScoped.vue'
+
+// 6. Composition API - Computed & Watchers
+import ComputedBasic from './components/practices/composition/ComputedBasic.vue'
+import WatchersBasic from './components/practices/composition/WatchersBasic.vue'
+import WatchersMulti from './components/practices/composition/WatchersMulti.vue'
+import WatchersDeep from './components/practices/composition/WatchersDeep.vue'
+import WatchersReactive from './components/practices/composition/WatchersReactive.vue'
+import WatchersWatchEffect from './components/practices/composition/WatchersWatchEffect.vue'
 </script>
 
 <template>
@@ -83,6 +91,15 @@ import StyleScoped from './components/practices/basic/StyleScoped.vue'
     <h1>5. Vue Style Handling</h1>
     <hr />
     <StyleScoped />
+
+    <h1>6. Composition API (Computed &amp; Watchers)</h1>
+    <hr />
+    <ComputedBasic />
+    <WatchersBasic />
+    <WatchersMulti />
+    <WatchersDeep />
+    <WatchersReactive />
+    <WatchersWatchEffect />
   </div>
 </template>
 
