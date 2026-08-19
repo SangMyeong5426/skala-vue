@@ -106,14 +106,23 @@ src/
 
 과정 자료의 기본 예제에서 추가·변경한 내용을 기록합니다.
 
-| 단원             | 대상                | 변경 내용                                                                                       |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------------------------- |
-| 2. Vue Directive | `VueIf.vue`         | 성적 등급 분기에 **A+ 학점(95점 이상)** 조건을 추가하여 `v-else-if` 체인을 4단계 → 5단계로 확장 |
-| Hands on 1       | `WeatherMockup.vue` | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                    |
-| Hands on 1       | `WeatherMockup.vue` | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                          |
-| Hands on 1       | `WeatherMockup.vue` | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                      |
-| Hands on 1       | `WeatherMockup.vue` | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                         |
-| Hands on 1       | `WeatherMockup.vue` | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                             |
+| 단원             | 대상                   | 변경 내용                                                                                                                                                                                  |
+| ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1. 학습환경구성  | `SampleOne.vue`        | 일반 변수의 **실제 값을 alert로 확인**하는 버튼과 **동시 초기화 버튼** 추가 — 화면에 그려진 값과 메모리 값이 다르다는 점, 리렌더링이 일어나면 밀려 있던 값이 한꺼번에 반영된다는 점을 검증 |
+| 1. 학습환경구성  | `SampleTwo.vue`        | 보간법 안에서 쓸 수 있는 **표현식 예제 3종 추가** (단어 수 계산, 문자열 뒤집기, 삼항 연산자)                                                                                               |
+| 2. Vue Directive | `VueHtml.vue`          | 인라인 태그뿐 아니라 **`<ul>` 블록 구조 주입 예제** 추가                                                                                                                                   |
+| 2. Vue Directive | `VueHtmlXss.vue`       | **공격 샘플 자동 입력 버튼**과 **안전 모드 토글** 추가 — 같은 입력을 `v-html` 대신 텍스트 보간으로 출력하면 XSS가 무력화됨을 비교                                                          |
+| 2. Vue Directive | `VueText.vue`          | **보간법 vs `v-text` 비교 예제** 추가 — `v-text`는 요소 내용을 통째로 교체하므로 다른 텍스트와 섞어 쓸 수 없음을 확인                                                                      |
+| 2. Vue Directive | `VueBind.vue`          | **동적 속성명(Dynamic Argument) `:[attrName]` 예제** 추가 — 속성 이름 자체를 런타임에 `href` ↔ `title`로 전환                                                                              |
+| 2. Vue Directive | `VueBindClass.vue`     | **정적 class + 동적 `:class` 조합 패턴** 추가 — 안전/주의/위험 3단계를 순환시키며 동적 클래스만 교체                                                                                       |
+| 2. Vue Directive | `VueBindStyle.vue`     | **`range` 슬라이더와 `color` 피커**로 글자 크기·배경색을 실시간 제어하는 예제 추가 (`v-model.number` 활용)                                                                                 |
+| 2. Vue Directive | `VueBindShorthand.vue` | same-name shorthand 적용 대상을 **`alt`, `title`, `href`까지 확장**                                                                                                                        |
+| 2. Vue Directive | `VueIf.vue`            | 성적 등급 분기에 **A+ 학점(95점 이상)** 조건을 추가하여 `v-else-if` 체인을 4단계 → 5단계로 확장                                                                                            |
+| Hands on 1       | `WeatherMockup.vue`    | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                               |
+| Hands on 1       | `WeatherMockup.vue`    | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                     |
+| Hands on 1       | `WeatherMockup.vue`    | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                 |
+| Hands on 1       | `WeatherMockup.vue`    | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                    |
+| Hands on 1       | `WeatherMockup.vue`    | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                        |
 
 ## 배포
 
