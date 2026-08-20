@@ -1,18 +1,14 @@
 <script setup>
-// 종합과제 1: 날씨 Mockup (자료 p.116)
-import WeatherMockup from '@/components/exercise/WeatherMockup.vue'
-// 종합과제 2: 날씨 Composition (자료 p.145)
-import WeatherComposition from '@/components/exercise/WeatherComposition.vue'
+// 종합과제 1·2 통합: 날씨 대시보드
+// - Hands on 1 (자료 p.116): v-for 목록 / v-if 라벨 / :value·@input 검색 / 이벤트 수식어
+// - Hands on 2 (자료 p.145): computed 필터 / watch·watchEffect 감시
+import WeatherDashboard from '@/components/exercise/WeatherDashboard.vue'
 </script>
 
 <template>
   <div class="app-container">
-    <h1>🌤️ 과제 1: 날씨 (Mockup)</h1>
+    <h1>🌤️ 종합과제: 날씨 대시보드</h1>
     <hr />
-    <WeatherMockup />
-
-    <h1>🌤️ 과제 2: 날씨 (컴포지션)</h1>
-    <hr />
-    <WeatherComposition />
+    <WeatherDashboard />
   </div>
 </template>

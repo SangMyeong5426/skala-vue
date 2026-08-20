@@ -136,10 +136,9 @@ cp src/App.vue.exercise src/App.vue
 
 ### 종합과제
 
-| 과제                             | 컴포넌트                          | 구현 내용                                                                                                                                                                                                          |
-| -------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Hands on 1 — Weather Mockup      | `exercise/WeatherMockup.vue`      | `v-for` 날씨 카드 목록(`:key` 고유 id) / `v-if` 기온 25도 기준 라벨 분기 / `:value`+`@input` 한글 즉시 동기화 검색 / 카드 클릭 상태바 갱신 및 `@click.stop` 버블링 차단 / **대기질 현황·주간 예보 블록 자체 추가** |
-| Hands on 2 — Weather Composition | `exercise/WeatherComposition.vue` | `computed`로 검색어 필터(`filteredWeatherList`) / `watch`로 상태바 문구 감시 / `watchEffect`로 검색어 자동 추적 / 검색 결과 없음 안내 분기                                                                         |
+| 과제                             | 컴포넌트                        | 구현 내용                                                                                                                                                                                                                    |
+| -------------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hands on 1·2 — Weather Dashboard | `exercise/WeatherDashboard.vue` | **[1일차]** `v-for` 날씨 카드(`:key` 고유 id) / `v-if` 기온 라벨 분기 / `:value`+`@input` 한글 즉시 동기화 / `@click.stop` 버블링 차단 · **[2일차]** `computed` 검색 필터 / `watch`·`watchEffect` 감시 / 검색 결과 없음 안내 |
 
 ## 개인 Customization 내역
 
@@ -163,25 +162,25 @@ cp src/App.vue.exercise src/App.vue
 | 6. Composition API | `WatchersDeep.vue`        | deep 감시의 **`oldValue` 함정을 화면에서 직접 검증**(`newVal === oldVal`)하고, **스냅샷 복사로 이전 상태 전체를 추적**하는 우회법 추가                                                                        |
 | 6. Composition API | `WatchersReactive.vue`    | **구조 분해 시 반응성 단절 비교표** 추가 — `state.price` / `const { price } = state` / `toRefs(state)` 세 방식의 갱신 여부를 나란히 확인                                                                      |
 | 6. Composition API | `WatchersWatchEffect.vue` | **`onCleanup` 콜백으로 디바운스 구현** — 다음 실행 직전 이전 타이머를 취소해 타이핑이 멈춘 뒤에만 요청을 보내는 실무 패턴                                                                                     |
-| Hands on 1         | `WeatherMockup.vue`       | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                                                  |
-| Hands on 1         | `WeatherMockup.vue`       | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                                        |
-| Hands on 1         | `WeatherMockup.vue`       | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                                    |
-| Hands on 1         | `WeatherMockup.vue`       | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                                       |
-| Hands on 1         | `WeatherMockup.vue`       | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                                           |
-| Hands on 1         | `WeatherMockup.vue`       | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                                   |
-| Hands on 1         | `WeatherMockup.vue`       | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                                            |
-| Hands on 1         | `WeatherMockup.vue`       | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                                    |
-| Hands on 2         | `WeatherComposition.vue`  | **`selectedCity` computed 도입** — 1일차에는 `template v-for` + `v-if`로 5개 도시를 훑어 선택 도시를 찾았으나, computed로 추출해 순회를 제거하고 템플릿을 단순화                                              |
-| Hands on 2         | `WeatherComposition.vue`  | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                                      |
-| Hands on 2         | `WeatherComposition.vue`  | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색                               |
-| Hands on 2         | `WeatherComposition.vue`  | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                                     |
-| Hands on 2         | `WeatherComposition.vue`  | **즐겨찾기(⭐) + localStorage 영속화** — `watch`에 `deep: true`를 걸어 배열 변경 시 저장. 새로고침해도 유지되며, `watch`를 콘솔 로그가 아닌 실제 부수 효과 처리에 사용                                        |
-| Hands on 2         | `WeatherComposition.vue`  | **정렬 기능(기온/미세먼지/이름 + 오름·내림)** — ES2023 `toSorted()`로 구현. 일반 `sort()`는 원본 배열을 훼손하므로 `computed` 안에서 사용하면 안 된다는 점을 반영                                             |
-| Hands on 2         | `WeatherComposition.vue`  | **computed 3단 체이닝 구성** — `weatherList` → `filteredWeatherList`(검색) → `visibleWeatherList`(즐겨찾기·정렬) → `weatherSummary`(요약)                                                                     |
-| Hands on 2         | `WeatherComposition.vue`  | **빈 결과 원인 구분 안내** — 검색 불일치와 즐겨찾기 미등록을 서로 다른 문구로 분기 (요구사항 4를 기능 추가에 맞춰 정교화)                                                                                     |
-| Hands on 2         | `WeatherComposition.vue`  | **[컨셉] 생활 추천 패널** — 기온·날씨·미세먼지를 *해석*해 옷차림 / 우산 / 마스크 권고를 제시. 데이터를 나열하는 대시보드에서 **판단을 주는 앱**으로 성격을 확장                                               |
-| Hands on 2         | `WeatherComposition.vue`  | **외출 지수 100점 산출** — 기온 40 + 날씨 30 + 대기질 30으로 점수화하고, 미세먼지 매우 나쁨(35점)·강수(55점) 시 총점 상한을 두어 치명적 조건이 상쇄되지 않도록 보정. 점수에 따라 게이지 너비와 색이 함께 변함 |
-| Hands on 2         | `WeatherComposition.vue`  | 추천 대상은 **선택한 도시, 없으면 목록 첫 도시**로 폴백하여 패널이 비지 않게 처리. 5일 예보의 강수 일수를 세어 한 줄 안내 제공                                                                                |
+| Hands on 1·2       | `WeatherDashboard.vue`    | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                                                  |
+| Hands on 1·2       | `WeatherDashboard.vue`    | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                                        |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                                    |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                                       |
+| Hands on 1·2       | `WeatherDashboard.vue`    | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                                           |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                                   |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                                            |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                                    |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **`selectedCity` computed 도입** — 1일차에는 `template v-for` + `v-if`로 5개 도시를 훑어 선택 도시를 찾았으나, computed로 추출해 순회를 제거하고 템플릿을 단순화                                              |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                                      |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색                               |
+| Hands on 1·2       | `WeatherDashboard.vue`    | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                                     |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **즐겨찾기(⭐) + localStorage 영속화** — `watch`에 `deep: true`를 걸어 배열 변경 시 저장. 새로고침해도 유지되며, `watch`를 콘솔 로그가 아닌 실제 부수 효과 처리에 사용                                        |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **정렬 기능(기온/미세먼지/이름 + 오름·내림)** — ES2023 `toSorted()`로 구현. 일반 `sort()`는 원본 배열을 훼손하므로 `computed` 안에서 사용하면 안 된다는 점을 반영                                             |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **computed 3단 체이닝 구성** — `weatherList` → `filteredWeatherList`(검색) → `visibleWeatherList`(즐겨찾기·정렬) → `weatherSummary`(요약)                                                                     |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **빈 결과 원인 구분 안내** — 검색 불일치와 즐겨찾기 미등록을 서로 다른 문구로 분기 (요구사항 4를 기능 추가에 맞춰 정교화)                                                                                     |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **[컨셉] 생활 추천 패널** — 기온·날씨·미세먼지를 *해석*해 옷차림 / 우산 / 마스크 권고를 제시. 데이터를 나열하는 대시보드에서 **판단을 주는 앱**으로 성격을 확장                                               |
+| Hands on 1·2       | `WeatherDashboard.vue`    | **외출 지수 100점 산출** — 기온 40 + 날씨 30 + 대기질 30으로 점수화하고, 미세먼지 매우 나쁨(35점)·강수(55점) 시 총점 상한을 두어 치명적 조건이 상쇄되지 않도록 보정. 점수에 따라 게이지 너비와 색이 함께 변함 |
+| Hands on 1·2       | `WeatherDashboard.vue`    | 추천 대상은 **선택한 도시, 없으면 목록 첫 도시**로 폴백하여 패널이 비지 않게 처리. 5일 예보의 강수 일수를 세어 한 줄 안내 제공                                                                                |
 
 ## 배포
 
