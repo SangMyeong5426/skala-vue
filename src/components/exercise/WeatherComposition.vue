@@ -115,10 +115,55 @@ const selectedCity = computed(() =>
   weatherList.value.find((city) => city.id === selectedCityId.value),
 )
 
-// [커스터마이징] computed - 현재 표시 중인 목록의 요약 통계
-// 다른 computed(filteredWeatherList)에 의존하는 체이닝 구조
+// [커스터마이징] 즐겨찾기 - 브라우저를 닫았다 열어도 유지되도록 localStorage에 보관
+const FAVORITE_STORAGE_KEY = 'skala-vue:favorite-cities'
+const loadFavorites = () => {
+  try {
+    return JSON.parse(localStorage.getItem(FAVORITE_STORAGE_KEY) || '[]')
+  } catch {
+    return [] // 저장된 값이 깨져 있어도 앱이 죽지 않도록 방어
+  }
+}
+const favoriteIds = ref(loadFavorites())
+const showFavoritesOnly = ref(false)
+
+const isFavorite = (cityId) => favoriteIds.value.includes(cityId)
+const toggleFavorite = (cityId) => {
+  favoriteIds.value = isFavorite(cityId)
+    ? favoriteIds.value.filter((id) => id !== cityId)
+    : [...favoriteIds.value, cityId]
+}
+
+// [커스터마이징] 정렬 기준 (none | temp | pm10 | name)
+const sortKey = ref('none')
+const sortOrder = ref('desc')
+const toggleSortOrder = () => {
+  sortOrder.value = sortOrder.value === 'desc' ? 'asc' : 'desc'
+}
+
+// [커스터마이징] computed 3단 체이닝
+// weatherList → filteredWeatherList(검색) → visibleWeatherList(즐겨찾기 + 정렬)
+const visibleWeatherList = computed(() => {
+  let list = filteredWeatherList.value
+
+  if (showFavoritesOnly.value) {
+    list = list.filter((city) => favoriteIds.value.includes(city.id))
+  }
+  if (sortKey.value === 'none') return list
+
+  const direction = sortOrder.value === 'asc' ? 1 : -1
+  // toSorted()는 ES2023에 추가된 불변성 메서드로 원본 배열을 훼손하지 않는다.
+  // computed 안에서 sort()를 쓰면 원본 weatherList의 순서가 뒤섞여 버린다.
+  return list.toSorted((a, b) =>
+    sortKey.value === 'name'
+      ? a.name.localeCompare(b.name) * direction
+      : (a[sortKey.value] - b[sortKey.value]) * direction,
+  )
+})
+
+// [커스터마이징] computed - 현재 표시 중인 목록의 요약 통계 (체이닝의 마지막 단계)
 const weatherSummary = computed(() => {
-  const list = filteredWeatherList.value
+  const list = visibleWeatherList.value
   if (list.length === 0) return null
 
   const temps = list.map((city) => city.temp)
@@ -158,6 +203,18 @@ watch(filteredWeatherList, (newList) => {
   if (searchHistory.value[0] === query) return
   searchHistory.value = [query, ...searchHistory.value.filter((q) => q !== query)].slice(0, 5)
 })
+
+// [커스터마이징] watch - 즐겨찾기 변경 시 localStorage에 영속화
+// watch의 실제 용도는 콘솔 로그가 아니라 이런 '부수 효과' 처리다.
+// 배열 내부 변화를 감지해야 하므로 deep 옵션이 필요하다.
+watch(
+  favoriteIds,
+  (ids) => {
+    localStorage.setItem(FAVORITE_STORAGE_KEY, JSON.stringify(ids))
+    console.log(`⭐ [watch 감지] 즐겨찾기 ${ids.length}건을 localStorage에 저장했습니다.`)
+  },
+  { deep: true },
+)
 
 // ────────────────────────────────────────────────
 // 이벤트 핸들러
@@ -235,14 +292,43 @@ const applyHistory = (query) => {
     <!-- 지역별 날씨 현황 (필터 결과 기준) -->
     <section class="list-box">
       <h3>🏙️ 지역별 날씨 현황</h3>
+
+      <!-- [커스터마이징] 정렬 / 즐겨찾기 필터 컨트롤 -->
+      <div class="control-bar">
+        <label>정렬 기준:</label>
+        <select v-model="sortKey">
+          <option value="none">기본 순서</option>
+          <option value="temp">기온</option>
+          <option value="pm10">미세먼지</option>
+          <option value="name">이름</option>
+        </select>
+        <button :disabled="sortKey === 'none'" @click="toggleSortOrder">
+          {{ sortOrder === 'desc' ? '내림차순 ↓' : '오름차순 ↑' }}
+        </button>
+        <label class="fav-filter">
+          <input type="checkbox" v-model="showFavoritesOnly" />
+          즐겨찾기만 보기 ({{ favoriteIds.length }})
+        </label>
+      </div>
+
       <div
-        v-for="city in filteredWeatherList"
+        v-for="city in visibleWeatherList"
         :key="city.id"
         class="weather-card"
         :class="{ selected: selectedCityId === city.id }"
         @click="selectCard(city)"
       >
-        <h4>{{ weatherIcons[city.status] }} {{ city.name }} ({{ city.status }})</h4>
+        <h4>
+          <!-- [커스터마이징] 즐겨찾기 토글 (카드 클릭으로 전파되지 않도록 .stop) -->
+          <button
+            class="btn-fav"
+            :class="{ on: isFavorite(city.id) }"
+            @click.stop="toggleFavorite(city.id)"
+          >
+            {{ isFavorite(city.id) ? '⭐' : '☆' }}
+          </button>
+          {{ weatherIcons[city.status] }} {{ city.name }} ({{ city.status }})
+        </h4>
         <p>현재 기온: {{ city.temp }}°C</p>
         <p class="sub-info">습도: {{ city.humidity }}%</p>
 
@@ -255,15 +341,19 @@ const applyHistory = (query) => {
       </div>
 
       <!-- [요구사항 4] 검색 결과가 없을 때 안내 -->
+      <!-- [커스터마이징] 결과가 0건인 원인(검색 / 즐겨찾기 필터)을 구분해 안내 -->
       <p v-if="filteredWeatherList.length === 0" class="no-result">
         😭 '{{ searchQuery }}' 와(과) 일치하는 도시가 없습니다.
+      </p>
+      <p v-else-if="visibleWeatherList.length === 0" class="no-result fav-empty">
+        ⭐ 즐겨찾기한 도시가 없습니다. 카드의 별을 눌러 추가해 보세요.
       </p>
     </section>
 
     <!-- 대기질 현황 (필터 결과 연동) -->
     <section class="list-box">
       <h3>🌫️ 대기질 현황 (미세먼지 PM10)</h3>
-      <div v-for="city in filteredWeatherList" :key="city.id" class="air-row">
+      <div v-for="city in visibleWeatherList" :key="city.id" class="air-row">
         <span class="air-city">{{ city.name }}</span>
         <span class="air-value">{{ city.pm10 }}㎍/㎥</span>
         <span v-if="city.pm10 <= 30" class="badge air-good">😊 좋음</span>
@@ -271,7 +361,7 @@ const applyHistory = (query) => {
         <span v-else-if="city.pm10 <= 150" class="badge air-bad">😷 나쁨</span>
         <span v-else class="badge air-worst">🤢 매우 나쁨</span>
       </div>
-      <p v-if="filteredWeatherList.length === 0" class="placeholder-text">
+      <p v-if="visibleWeatherList.length === 0" class="placeholder-text">
         표시할 대기질 정보가 없습니다.
       </p>
     </section>
@@ -416,6 +506,43 @@ const applyHistory = (query) => {
 .history-chip:hover {
   border-color: #3498db;
   color: #3498db;
+}
+/* 정렬 / 즐겨찾기 컨트롤 바 */
+.control-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #dee2e6;
+  font-size: 14px;
+}
+/* exercise.css의 전역 input 규칙(width:90%)이 체크박스까지 늘리는 것을 방지 */
+.control-bar input[type='checkbox'] {
+  width: auto;
+  margin-right: 4px;
+}
+.fav-filter {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  cursor: pointer;
+}
+/* 즐겨찾기 별 버튼 */
+.btn-fav {
+  padding: 0 4px;
+  border: none;
+  background: none;
+  font-size: 15px;
+  line-height: 1;
+  color: #b2bec3;
+  cursor: pointer;
+}
+.btn-fav.on {
+  color: #fdcb6e;
+}
+.fav-empty {
+  color: #e17055;
 }
 /* 검색 결과 없음 */
 .no-result {

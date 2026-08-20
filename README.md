@@ -175,6 +175,10 @@ cp src/App.vue.exercise src/App.vue
 | Hands on 2         | `WeatherComposition.vue`  | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                   |
 | Hands on 2         | `WeatherComposition.vue`  | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색            |
 | Hands on 2         | `WeatherComposition.vue`  | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                  |
+| Hands on 2         | `WeatherComposition.vue`  | **즐겨찾기(⭐) + localStorage 영속화** — `watch`에 `deep: true`를 걸어 배열 변경 시 저장. 새로고침해도 유지되며, `watch`를 콘솔 로그가 아닌 실제 부수 효과 처리에 사용                     |
+| Hands on 2         | `WeatherComposition.vue`  | **정렬 기능(기온/미세먼지/이름 + 오름·내림)** — ES2023 `toSorted()`로 구현. 일반 `sort()`는 원본 배열을 훼손하므로 `computed` 안에서 사용하면 안 된다는 점을 반영                          |
+| Hands on 2         | `WeatherComposition.vue`  | **computed 3단 체이닝 구성** — `weatherList` → `filteredWeatherList`(검색) → `visibleWeatherList`(즐겨찾기·정렬) → `weatherSummary`(요약)                                                  |
+| Hands on 2         | `WeatherComposition.vue`  | **빈 결과 원인 구분 안내** — 검색 불일치와 즐겨찾기 미등록을 서로 다른 문구로 분기 (요구사항 4를 기능 추가에 맞춰 정교화)                                                                  |
 
 ## 배포
 
