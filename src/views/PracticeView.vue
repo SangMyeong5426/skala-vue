@@ -34,6 +34,7 @@ import StyleScoped from '@/components/practices/basic/StyleScoped.vue'
 
 // 7. Vue Components - Lifecycle
 import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
+import PropsEmitsParent from '@/components/practices/component/PropsEmitsParent.vue'
 
 // 6. Composition API - Computed & Watchers
 import ComputedBasic from '@/components/practices/composition/ComputedBasic.vue'
@@ -96,5 +97,6 @@ import WatchersWatchEffect from '@/components/practices/composition/WatchersWatc
     <h1>7. Vue Components (Lifecycle)</h1>
     <hr />
     <LifecycleParent />
+    <PropsEmitsParent />
   </div>
 </template>
