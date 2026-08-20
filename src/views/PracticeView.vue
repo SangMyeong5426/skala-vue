@@ -32,6 +32,9 @@ import ModelModifier from '@/components/practices/basic/ModelModifier.vue'
 // 5. Vue Style Handling
 import StyleScoped from '@/components/practices/basic/StyleScoped.vue'
 
+// 7. Vue Components - Lifecycle
+import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
+
 // 6. Composition API - Computed & Watchers
 import ComputedBasic from '@/components/practices/composition/ComputedBasic.vue'
 import WatchersBasic from '@/components/practices/composition/WatchersBasic.vue'
@@ -89,5 +92,9 @@ import WatchersWatchEffect from '@/components/practices/composition/WatchersWatc
     <WatchersDeep />
     <WatchersReactive />
     <WatchersWatchEffect />
+
+    <h1>7. Vue Components (Lifecycle)</h1>
+    <hr />
+    <LifecycleParent />
   </div>
 </template>

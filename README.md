@@ -134,6 +134,13 @@ cp src/App.vue.exercise src/App.vue
 | `WatchersReactive.vue`    | `reactive()` 데이터 감시 규칙과 특정 속성 타겟 감시   |
 | `WatchersWatchEffect.vue` | `watchEffect()` 자동 의존성 추적과 즉시 실행          |
 
+### 7. Vue Components — Lifecycle
+
+| 컴포넌트              | 학습 내용                                                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `LifecycleParent.vue` | `v-if` 토글로 자식 컴포넌트를 생성·파괴하며 훅 실행 순서 관찰                                                                        |
+| `LifecycleChild.vue`  | `setup` → `onBeforeMount` → `onMounted` → `onBeforeUpdate` → `onUpdated` → `onBeforeUnmount` → `onUnmounted` 전체 흐름과 타이머 정리 |
+
 ### 종합과제
 
 | 과제                             | 컴포넌트                        | 구현 내용                                                                                                                                                                                                                    |
@@ -162,6 +169,10 @@ cp src/App.vue.exercise src/App.vue
 | 6. Composition API | `WatchersDeep.vue`        | deep 감시의 **`oldValue` 함정을 화면에서 직접 검증**(`newVal === oldVal`)하고, **스냅샷 복사로 이전 상태 전체를 추적**하는 우회법 추가                                                                        |
 | 6. Composition API | `WatchersReactive.vue`    | **구조 분해 시 반응성 단절 비교표** 추가 — `state.price` / `const { price } = state` / `toRefs(state)` 세 방식의 갱신 여부를 나란히 확인                                                                      |
 | 6. Composition API | `WatchersWatchEffect.vue` | **`onCleanup` 콜백으로 디바운스 구현** — 다음 실행 직전 이전 타이머를 취소해 타이핑이 멈춘 뒤에만 요청을 보내는 실무 패턴                                                                                     |
+| 7. Vue Components  | `LifecycleChild.vue`      | 자료의 훅 4종(`setup`/`onMounted`/`onUpdated`/`onUnmounted`)에 **`onBeforeMount`·`onBeforeUpdate`·`onBeforeUnmount`를 더해 7단계 전체 흐름**을 관찰하도록 확장                                                |
+| 7. Vue Components  | `LifecycleChild.vue`      | **메모리 누수 실증 스위치** — `clearInterval` 호출 여부를 prop으로 제어. 정리하지 않고 파괴하면 소멸된 컴포넌트의 타이머가 계속 돌며 콘솔에 경고를 남김 (자료가 주석으로만 경고한 내용을 눈으로 확인)         |
+| 7. Vue Components  | `LifecycleChild.vue`      | 갱신 훅(`onBeforeUpdate`/`onUpdated`)에서는 **부모로 emit하지 않도록 제한** — 부모 상태 변경이 자식 갱신을 다시 유발하는 무한 루프를 피하기 위함 (코드 주석으로 근거 명시)                                    |
+| 7. Vue Components  | `LifecycleParent.vue`     | **훅 실행 순서 타임라인** — 자식이 보고한 훅을 시각·순번과 함께 화면에 기록해 콘솔을 열지 않아도 생명주기를 확인. 유령 타이머 실행 횟수도 집계                                                                |
 | Hands on 1·2       | `WeatherDashboard.vue`    | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                                                  |
 | Hands on 1·2       | `WeatherDashboard.vue`    | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                                        |
 | Hands on 1·2       | `WeatherDashboard.vue`    | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                                    |
