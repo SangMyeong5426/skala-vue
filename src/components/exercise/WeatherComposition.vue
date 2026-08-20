@@ -217,6 +217,85 @@ watch(
 )
 
 // ────────────────────────────────────────────────
+// [커스터마이징] 생활 추천 로직
+// 새로운 데이터를 더 받아오지 않고, 이미 가진 값(기온/날씨/미세먼지)을
+// '해석'해서 사용자가 바로 행동할 수 있는 판단으로 바꿔 준다.
+// ────────────────────────────────────────────────
+
+// 기온 구간별 옷차림 가이드 (위에서부터 순서대로 검사)
+const OUTFIT_GUIDE = [
+  { min: 28, icon: '🥵', label: '민소매·반팔·반바지', desc: '통풍이 잘 되는 옷으로 입으세요.' },
+  { min: 23, icon: '👕', label: '반팔·얇은 셔츠', desc: '가볍게 입어도 좋은 날씨예요.' },
+  { min: 20, icon: '👔', label: '긴팔·얇은 가디건', desc: '아침저녁으로 선선합니다.' },
+  { min: 17, icon: '🧥', label: '맨투맨·얇은 니트', desc: '겉옷 하나 챙기면 좋아요.' },
+  { min: 12, icon: '🧥', label: '자켓·가디건', desc: '일교차에 대비하세요.' },
+  { min: 9, icon: '🧣', label: '트렌치코트·야상', desc: '바람이 제법 찹니다.' },
+  { min: 5, icon: '🧶', label: '코트·두꺼운 니트', desc: '따뜻하게 입으세요.' },
+  { min: -100, icon: '🥶', label: '패딩·목도리·장갑', desc: '한파 대비가 필요합니다.' },
+]
+
+const getOutfit = (temp) => OUTFIT_GUIDE.find((guide) => temp >= guide.min)
+
+const getUmbrella = (status) => {
+  if (status === '비') return { icon: '☂️', label: '우산 필수', tone: 'danger' }
+  if (status === '흐림') return { icon: '🌂', label: '우산 챙기면 안심', tone: 'warn' }
+  return { icon: '🌤️', label: '우산 불필요', tone: 'ok' }
+}
+
+const getMask = (pm10) => {
+  if (pm10 <= 30) return { icon: '😊', label: '마스크 불필요', tone: 'ok' }
+  if (pm10 <= 80) return { icon: '🙂', label: '민감군만 주의', tone: 'soft' }
+  if (pm10 <= 150) return { icon: '😷', label: '마스크 권장', tone: 'warn' }
+  return { icon: '🚨', label: '외출 자제 · KF94 착용', tone: 'danger' }
+}
+
+// 외출 지수 100점 = 기온 40 + 날씨 30 + 대기질 30
+const STATUS_SCORE = { 맑음: 30, 구름: 22, 흐림: 15, 비: 5 }
+const getOutdoorScore = (city) => {
+  // 21°C를 가장 쾌적한 기준으로 두고 멀어질수록 감점
+  const tempScore = Math.max(0, 40 - Math.abs(city.temp - 21) * 3)
+  const statusScore = STATUS_SCORE[city.status] ?? 15
+  const airScore = city.pm10 <= 30 ? 30 : city.pm10 <= 80 ? 22 : city.pm10 <= 150 ? 10 : 0
+  const total = Math.round(tempScore + statusScore + airScore)
+
+  // 단순 합산만 하면 기온·날씨가 좋을 때 치명적 조건이 상쇄된다.
+  // 미세먼지 '매우 나쁨'이거나 비가 오는 날은 총점에 상한을 둔다.
+  if (city.pm10 > 150) return Math.min(total, 35)
+  if (city.status === '비') return Math.min(total, 55)
+  return total
+}
+
+const getGrade = (score) => {
+  if (score >= 80) return { label: '아주 좋음', tone: 'ok' }
+  if (score >= 60) return { label: '좋음', tone: 'soft' }
+  if (score >= 40) return { label: '보통', tone: 'warn' }
+  return { label: '비추천', tone: 'danger' }
+}
+
+// 추천 대상: 사용자가 고른 도시, 아직 고르지 않았다면 목록의 첫 도시
+const recommendTarget = computed(() => selectedCity.value ?? visibleWeatherList.value[0] ?? null)
+
+// [커스터마이징] computed - 여러 판단을 하나의 추천 결과로 조립
+const recommendation = computed(() => {
+  const city = recommendTarget.value
+  if (!city) return null
+
+  const score = getOutdoorScore(city)
+  const rainyDays = city.forecast.filter((day) => day.status === '비').length
+
+  return {
+    city,
+    score,
+    grade: getGrade(score),
+    outfit: getOutfit(city.temp),
+    umbrella: getUmbrella(city.status),
+    mask: getMask(city.pm10),
+    rainyDays,
+    isPicked: Boolean(selectedCity.value), // 사용자가 직접 고른 도시인지
+  }
+})
+
+// ────────────────────────────────────────────────
 // 이벤트 핸들러
 // ────────────────────────────────────────────────
 const handleSearchInput = (e) => {
@@ -366,6 +445,64 @@ const applyHistory = (query) => {
       </p>
     </section>
 
+    <!-- [커스터마이징] 오늘의 생활 추천 -->
+    <section class="list-box recommend-box">
+      <h3>🧥 오늘의 생활 추천</h3>
+
+      <template v-if="recommendation">
+        <div class="rec-head">
+          <span class="rec-city">
+            {{ recommendation.city.name }}
+            <small v-if="!recommendation.isPicked" class="rec-hint">(카드를 고르면 바뀝니다)</small>
+          </span>
+          <span class="rec-grade" :class="recommendation.grade.tone">
+            외출 지수 {{ recommendation.score }}점 · {{ recommendation.grade.label }}
+          </span>
+        </div>
+
+        <!-- 점수 게이지: 값에 따라 너비와 색이 함께 바뀐다 -->
+        <div class="score-track">
+          <div
+            class="score-fill"
+            :class="recommendation.grade.tone"
+            :style="{ width: recommendation.score + '%' }"
+          ></div>
+        </div>
+
+        <ul class="rec-list">
+          <li class="rec-item">
+            <span class="rec-icon">{{ recommendation.outfit.icon }}</span>
+            <span class="rec-label">{{ recommendation.outfit.label }}</span>
+            <span class="rec-desc">{{ recommendation.outfit.desc }}</span>
+          </li>
+          <li class="rec-item">
+            <span class="rec-icon">{{ recommendation.umbrella.icon }}</span>
+            <span class="rec-label" :class="recommendation.umbrella.tone">
+              {{ recommendation.umbrella.label }}
+            </span>
+            <span class="rec-desc">현재 날씨: {{ recommendation.city.status }}</span>
+          </li>
+          <li class="rec-item">
+            <span class="rec-icon">{{ recommendation.mask.icon }}</span>
+            <span class="rec-label" :class="recommendation.mask.tone">
+              {{ recommendation.mask.label }}
+            </span>
+            <span class="rec-desc">미세먼지 {{ recommendation.city.pm10 }}㎍/㎥</span>
+          </li>
+        </ul>
+
+        <p class="rec-summary">
+          <template v-if="recommendation.rainyDays > 0">
+            앞으로 5일 중 <strong>{{ recommendation.rainyDays }}일</strong> 비 예보가 있습니다. 우산
+            챙기는 날을 미리 확인해 두세요.
+          </template>
+          <template v-else>앞으로 5일간 비 예보는 없습니다. 나들이 계획하기 좋아요.</template>
+        </p>
+      </template>
+
+      <p v-else class="placeholder-text">추천할 도시가 없습니다.</p>
+    </section>
+
     <!-- 주간 예보 - selectedCity computed 덕분에 순회 없이 바로 접근 -->
     <section class="list-box">
       <h3>📅 주간 예보</h3>
@@ -507,6 +644,108 @@ const applyHistory = (query) => {
   border-color: #3498db;
   color: #3498db;
 }
+/* 오늘의 생활 추천 */
+.recommend-box {
+  background: #fffdf5;
+  border-color: #fdcb6e;
+}
+.rec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.rec-city {
+  font-weight: 700;
+  font-size: 15px;
+}
+.rec-hint {
+  margin-left: 4px;
+  font-weight: 400;
+  color: #b2bec3;
+}
+.rec-grade {
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+}
+.score-track {
+  height: 8px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: #ecf0f1;
+  overflow: hidden;
+}
+.score-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+.rec-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rec-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  border: 1px solid #f0e6c8;
+  border-radius: 6px;
+  background: #fff;
+}
+.rec-icon {
+  font-size: 20px;
+}
+.rec-label {
+  min-width: 150px;
+  font-weight: 600;
+}
+.rec-desc {
+  color: #7f8c8d;
+  font-size: 13px;
+}
+.rec-summary {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #fff8e1;
+  font-size: 14px;
+}
+/* 판단 결과 색상 (게이지 배경 / 배지 배경 / 라벨 글자색 공용) */
+.rec-grade.ok,
+.score-fill.ok {
+  background-color: #00b894;
+}
+.rec-grade.soft,
+.score-fill.soft {
+  background-color: #0984e3;
+}
+.rec-grade.warn,
+.score-fill.warn {
+  background-color: #e17055;
+}
+.rec-grade.danger,
+.score-fill.danger {
+  background-color: #d63031;
+}
+.rec-label.ok {
+  color: #00b894;
+}
+.rec-label.soft {
+  color: #0984e3;
+}
+.rec-label.warn {
+  color: #e17055;
+}
+.rec-label.danger {
+  color: #d63031;
+}
+
 /* 정렬 / 즐겨찾기 컨트롤 바 */
 .control-bar {
   display: flex;
