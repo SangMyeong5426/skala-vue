@@ -136,13 +136,12 @@ cp src/App.vue.exercise src/App.vue
 
 ### 7. Vue Components — Lifecycle
 
-| 컴포넌트                   | 학습 내용                                                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `LifecycleParent.vue`      | `v-if` 토글로 자식 컴포넌트를 생성·파괴하며 훅 실행 순서 관찰                                                                        |
-| `LifecycleChild.vue`       | `setup` → `onBeforeMount` → `onMounted` → `onBeforeUpdate` → `onUpdated` → `onBeforeUnmount` → `onUnmounted` 전체 흐름과 타이머 정리 |
-| `PropsEmitsParent.vue`     | 부모 → 자식 props 전달, 자식 이벤트 수신 및 페이로드 처리                                                                            |
-| `PropsEmitsChild.vue`      | `defineProps` 유효성 검사, `defineEmits`로 커스텀 이벤트 발신                                                                        |
-| `PropsEmitsModelChild.vue` | `defineModel`로 컴포넌트에 `v-model` 구현                                                                                            |
+| 컴포넌트               | 학습 내용                                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `LifecycleParent.vue`  | `v-if` 토글로 자식 컴포넌트를 생성·파괴하며 훅 실행 순서 관찰                                                                        |
+| `LifecycleChild.vue`   | `setup` → `onBeforeMount` → `onMounted` → `onBeforeUpdate` → `onUpdated` → `onBeforeUnmount` → `onUnmounted` 전체 흐름과 타이머 정리 |
+| `PropsEmitsParent.vue` | 부모 → 자식 props 전달, 자식 이벤트 수신 및 페이로드 처리                                                                            |
+| `PropsEmitsChild.vue`  | `defineProps` 유효성 검사, `defineEmits`로 커스텀 이벤트 발신                                                                        |
 
 ### 종합과제
 
@@ -154,52 +153,28 @@ cp src/App.vue.exercise src/App.vue
 
 과정 자료의 기본 예제에서 추가·변경한 내용을 기록합니다.
 
-| 단원               | 대상                       | 변경 내용                                                                                                                                                                                                     |
-| ------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1. 학습환경구성    | `SampleOne.vue`            | 일반 변수의 **실제 값을 alert로 확인**하는 버튼과 **동시 초기화 버튼** 추가 — 화면에 그려진 값과 메모리 값이 다르다는 점, 리렌더링이 일어나면 밀려 있던 값이 한꺼번에 반영된다는 점을 검증                    |
-| 1. 학습환경구성    | `SampleTwo.vue`            | 보간법 안에서 쓸 수 있는 **표현식 예제 3종 추가** (단어 수 계산, 문자열 뒤집기, 삼항 연산자)                                                                                                                  |
-| 2. Vue Directive   | `VueHtml.vue`              | 인라인 태그뿐 아니라 **`<ul>` 블록 구조 주입 예제** 추가                                                                                                                                                      |
-| 2. Vue Directive   | `VueHtmlXss.vue`           | **공격 샘플 자동 입력 버튼**과 **안전 모드 토글** 추가 — 같은 입력을 `v-html` 대신 텍스트 보간으로 출력하면 XSS가 무력화됨을 비교                                                                             |
-| 2. Vue Directive   | `VueText.vue`              | **보간법 vs `v-text` 비교 예제** 추가 — `v-text`는 요소 내용을 통째로 교체하므로 다른 텍스트와 섞어 쓸 수 없음을 확인                                                                                         |
-| 2. Vue Directive   | `VueBind.vue`              | **동적 속성명(Dynamic Argument) `:[attrName]` 예제** 추가 — 속성 이름 자체를 런타임에 `href` ↔ `title`로 전환                                                                                                 |
-| 2. Vue Directive   | `VueBindClass.vue`         | **정적 class + 동적 `:class` 조합 패턴** 추가 — 안전/주의/위험 3단계를 순환시키며 동적 클래스만 교체                                                                                                          |
-| 2. Vue Directive   | `VueBindStyle.vue`         | **`range` 슬라이더와 `color` 피커**로 글자 크기·배경색을 실시간 제어하는 예제 추가 (`v-model.number` 활용)                                                                                                    |
-| 2. Vue Directive   | `VueBindShorthand.vue`     | same-name shorthand 적용 대상을 **`alt`, `title`, `href`까지 확장**                                                                                                                                           |
-| 2. Vue Directive   | `VueIf.vue`                | 성적 등급 분기에 **A+ 학점(95점 이상)** 조건을 추가하여 `v-else-if` 체인을 4단계 → 5단계로 확장                                                                                                               |
-| 6. Composition API | `ComputedBasic.vue`        | **computed 체이닝**(computed가 다른 computed를 의존)과 **쓰기 가능한 computed**(`get`/`set`) 예제 추가 — `v-model`로 양방향 바인딩까지 확인                                                                   |
-| 6. Composition API | `WatchersBasic.vue`        | **`immediate: true` 옵션**과 **감시 중지 핸들** 실습 추가 — `watch()` 반환값을 호출해 감시를 해제하고, 해제 후에도 다른 감시자는 계속 동작함을 비교                                                           |
-| 6. Composition API | `WatchersMulti.vue`        | **변경 원인 소스 판별**(도시/날짜 중 무엇이 바뀌었는지)과 **최근 5건 변경 이력 목록** 추가                                                                                                                    |
-| 6. Composition API | `WatchersDeep.vue`         | deep 감시의 **`oldValue` 함정을 화면에서 직접 검증**(`newVal === oldVal`)하고, **스냅샷 복사로 이전 상태 전체를 추적**하는 우회법 추가                                                                        |
-| 6. Composition API | `WatchersReactive.vue`     | **구조 분해 시 반응성 단절 비교표** 추가 — `state.price` / `const { price } = state` / `toRefs(state)` 세 방식의 갱신 여부를 나란히 확인                                                                      |
-| 6. Composition API | `WatchersWatchEffect.vue`  | **`onCleanup` 콜백으로 디바운스 구현** — 다음 실행 직전 이전 타이머를 취소해 타이핑이 멈춘 뒤에만 요청을 보내는 실무 패턴                                                                                     |
-| 7. Vue Components  | `LifecycleChild.vue`       | 자료의 훅 4종(`setup`/`onMounted`/`onUpdated`/`onUnmounted`)에 **`onBeforeMount`·`onBeforeUpdate`·`onBeforeUnmount`를 더해 7단계 전체 흐름**을 관찰하도록 확장                                                |
-| 7. Vue Components  | `LifecycleChild.vue`       | **메모리 누수 실증 스위치** — `clearInterval` 호출 여부를 prop으로 제어. 정리하지 않고 파괴하면 소멸된 컴포넌트의 타이머가 계속 돌며 콘솔에 경고를 남김 (자료가 주석으로만 경고한 내용을 눈으로 확인)         |
-| 7. Vue Components  | `LifecycleChild.vue`       | 갱신 훅(`onBeforeUpdate`/`onUpdated`)에서는 **부모로 emit하지 않도록 제한** — 부모 상태 변경이 자식 갱신을 다시 유발하는 무한 루프를 피하기 위함 (코드 주석으로 근거 명시)                                    |
-| 7. Vue Components  | `LifecycleParent.vue`      | **훅 실행 순서 타임라인** — 자식이 보고한 훅을 시각·순번과 함께 화면에 기록해 콘솔을 열지 않아도 생명주기를 확인. 유령 타이머 실행 횟수도 집계                                                                |
-| 7. Vue Components  | `PropsEmitsChild.vue`      | 자료 표(p.162)에만 정리된 **Props 유효성 검사 5종을 실제로 모두 적용** — 필수/타입, 기본값, 다중 타입, 커스텀 검증기. 부모 제어판에서 값을 바꿔 검증기 경고를 직접 유발                                       |
-| 7. Vue Components  | `PropsEmitsChild.vue`      | **props 읽기 전용 실증 버튼** — 자식에서 props 수정을 시도하면 값이 그대로임을 화면에 표시. ESLint(`vue/no-mutating-props`)·Vue 런타임 경고·값 미변경 3중으로 막힌다는 점 확인                                |
-| 7. Vue Components  | `PropsEmitsChild.vue`      | **객체 페이로드 이벤트(`report`) 추가** — emit의 두 번째 인자에 문자열뿐 아니라 객체도 실을 수 있음을 확인. 자식 입력값을 부모로 올려보내는 버튼도 추가                                                       |
-| 7. Vue Components  | `PropsEmitsModelChild.vue` | **`defineModel`로 컴포넌트 `v-model` 구현(심화)** — 자료 p.106의 "v-model은 v-bind + v-on의 축약"을 컴포넌트 레벨로 확장. 자식 입력창이 부모 상태를 직접 갱신                                                 |
-| 7. Vue Components  | `PropsEmitsParent.vue`     | **수신 이벤트 로그(최근 5건)** — 어떤 이벤트가 어떤 페이로드로 올라오는지 화면에 기록                                                                                                                         |
-| Hands on 1·2       | `WeatherDashboard.vue`     | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                                                  |
-| Hands on 1·2       | `WeatherDashboard.vue`     | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                                        |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                                    |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                                       |
-| Hands on 1·2       | `WeatherDashboard.vue`     | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                                           |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                                   |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                                            |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                                    |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **`selectedCity` computed 도입** — 1일차에는 `template v-for` + `v-if`로 5개 도시를 훑어 선택 도시를 찾았으나, computed로 추출해 순회를 제거하고 템플릿을 단순화                                              |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                                      |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색                               |
-| Hands on 1·2       | `WeatherDashboard.vue`     | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                                     |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **즐겨찾기(⭐) + localStorage 영속화** — `watch`에 `deep: true`를 걸어 배열 변경 시 저장. 새로고침해도 유지되며, `watch`를 콘솔 로그가 아닌 실제 부수 효과 처리에 사용                                        |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **정렬 기능(기온/미세먼지/이름 + 오름·내림)** — ES2023 `toSorted()`로 구현. 일반 `sort()`는 원본 배열을 훼손하므로 `computed` 안에서 사용하면 안 된다는 점을 반영                                             |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **computed 3단 체이닝 구성** — `weatherList` → `filteredWeatherList`(검색) → `visibleWeatherList`(즐겨찾기·정렬) → `weatherSummary`(요약)                                                                     |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **빈 결과 원인 구분 안내** — 검색 불일치와 즐겨찾기 미등록을 서로 다른 문구로 분기 (요구사항 4를 기능 추가에 맞춰 정교화)                                                                                     |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **[컨셉] 생활 추천 패널** — 기온·날씨·미세먼지를 *해석*해 옷차림 / 우산 / 마스크 권고를 제시. 데이터를 나열하는 대시보드에서 **판단을 주는 앱**으로 성격을 확장                                               |
-| Hands on 1·2       | `WeatherDashboard.vue`     | **외출 지수 100점 산출** — 기온 40 + 날씨 30 + 대기질 30으로 점수화하고, 미세먼지 매우 나쁨(35점)·강수(55점) 시 총점 상한을 두어 치명적 조건이 상쇄되지 않도록 보정. 점수에 따라 게이지 너비와 색이 함께 변함 |
-| Hands on 1·2       | `WeatherDashboard.vue`     | 추천 대상은 **선택한 도시, 없으면 목록 첫 도시**로 폴백하여 패널이 비지 않게 처리. 5일 예보의 강수 일수를 세어 한 줄 안내 제공                                                                                |
+| 단원             | 대상                   | 변경 내용                                                                                                                                                                                                     |
+| ---------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2. Vue Directive | `VueIf.vue`            | 성적 등급 분기에 **A+ 학점(95점 이상)** 조건을 추가하여 `v-else-if` 체인을 4단계 → 5단계로 확장                                                                                                               |
+| Hands on 1·2     | `WeatherDashboard.vue` | 기본 3개 도시에 **대전·제주 추가**(v-if 양쪽 분기가 모두 걸리도록 기온 배치)                                                                                                                                  |
+| Hands on 1·2     | `WeatherDashboard.vue` | 데이터에 **`humidity`(습도) 필드** 확장 및 카드에 표시                                                                                                                                                        |
+| Hands on 1·2     | `WeatherDashboard.vue` | **날씨 상태 → 이모지 아이콘 매핑 객체**(`weatherIcons`)로 카드 가독성 개선                                                                                                                                    |
+| Hands on 1·2     | `WeatherDashboard.vue` | **선택된 카드 하이라이트** — 2단원에서 학습한 `:class` 객체 구문 재활용                                                                                                                                       |
+| Hands on 1·2     | `WeatherDashboard.vue` | 검색어 미입력 시 안내 문구를 `v-if`/`v-else`로 분기                                                                                                                                                           |
+| Hands on 1·2     | `WeatherDashboard.vue` | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                                   |
+| Hands on 1·2     | `WeatherDashboard.vue` | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                                            |
+| Hands on 1·2     | `WeatherDashboard.vue` | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                                    |
+| Hands on 1·2     | `WeatherDashboard.vue` | **`selectedCity` computed 도입** — 1일차에는 `template v-for` + `v-if`로 5개 도시를 훑어 선택 도시를 찾았으나, computed로 추출해 순회를 제거하고 템플릿을 단순화                                              |
+| Hands on 1·2     | `WeatherDashboard.vue` | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                                      |
+| Hands on 1·2     | `WeatherDashboard.vue` | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색                               |
+| Hands on 1·2     | `WeatherDashboard.vue` | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                                     |
+| Hands on 1·2     | `WeatherDashboard.vue` | **즐겨찾기(⭐) + localStorage 영속화** — `watch`에 `deep: true`를 걸어 배열 변경 시 저장. 새로고침해도 유지되며, `watch`를 콘솔 로그가 아닌 실제 부수 효과 처리에 사용                                        |
+| Hands on 1·2     | `WeatherDashboard.vue` | **정렬 기능(기온/미세먼지/이름 + 오름·내림)** — ES2023 `toSorted()`로 구현. 일반 `sort()`는 원본 배열을 훼손하므로 `computed` 안에서 사용하면 안 된다는 점을 반영                                             |
+| Hands on 1·2     | `WeatherDashboard.vue` | **computed 3단 체이닝 구성** — `weatherList` → `filteredWeatherList`(검색) → `visibleWeatherList`(즐겨찾기·정렬) → `weatherSummary`(요약)                                                                     |
+| Hands on 1·2     | `WeatherDashboard.vue` | **빈 결과 원인 구분 안내** — 검색 불일치와 즐겨찾기 미등록을 서로 다른 문구로 분기 (요구사항 4를 기능 추가에 맞춰 정교화)                                                                                     |
+| Hands on 1·2     | `WeatherDashboard.vue` | **[컨셉] 생활 추천 패널** — 기온·날씨·미세먼지를 *해석*해 옷차림 / 우산 / 마스크 권고를 제시. 데이터를 나열하는 대시보드에서 **판단을 주는 앱**으로 성격을 확장                                               |
+| Hands on 1·2     | `WeatherDashboard.vue` | **외출 지수 100점 산출** — 기온 40 + 날씨 30 + 대기질 30으로 점수화하고, 미세먼지 매우 나쁨(35점)·강수(55점) 시 총점 상한을 두어 치명적 조건이 상쇄되지 않도록 보정. 점수에 따라 게이지 너비와 색이 함께 변함 |
+| Hands on 1·2     | `WeatherDashboard.vue` | 추천 대상은 **선택한 도시, 없으면 목록 첫 도시**로 폴백하여 패널이 비지 않게 처리. 5일 예보의 강수 일수를 세어 한 줄 안내 제공                                                                                |
 
 ## 배포
 
