@@ -136,9 +136,10 @@ cp src/App.vue.exercise src/App.vue
 
 ### 종합과제
 
-| 과제                        | 컴포넌트                     | 구현 내용                                                                                                                                                                                                          |
-| --------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Hands on 1 — Weather Mockup | `exercise/WeatherMockup.vue` | `v-for` 날씨 카드 목록(`:key` 고유 id) / `v-if` 기온 25도 기준 라벨 분기 / `:value`+`@input` 한글 즉시 동기화 검색 / 카드 클릭 상태바 갱신 및 `@click.stop` 버블링 차단 / **대기질 현황·주간 예보 블록 자체 추가** |
+| 과제                             | 컴포넌트                          | 구현 내용                                                                                                                                                                                                          |
+| -------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Hands on 1 — Weather Mockup      | `exercise/WeatherMockup.vue`      | `v-for` 날씨 카드 목록(`:key` 고유 id) / `v-if` 기온 25도 기준 라벨 분기 / `:value`+`@input` 한글 즉시 동기화 검색 / 카드 클릭 상태바 갱신 및 `@click.stop` 버블링 차단 / **대기질 현황·주간 예보 블록 자체 추가** |
+| Hands on 2 — Weather Composition | `exercise/WeatherComposition.vue` | `computed`로 검색어 필터(`filteredWeatherList`) / `watch`로 상태바 문구 감시 / `watchEffect`로 검색어 자동 추적 / 검색 결과 없음 안내 분기                                                                         |
 
 ## 개인 Customization 내역
 
@@ -170,6 +171,10 @@ cp src/App.vue.exercise src/App.vue
 | Hands on 1         | `WeatherMockup.vue`       | **[Mockup 추가] 대기질 현황 블록** — `pm10` 필드를 확장하고 환경부 기준 4단계(`좋음`/`보통`/`나쁨`/`매우 나쁨`)를 `v-if`~`v-else-if`~`v-else` 체인으로 분기                                |
 | Hands on 1         | `WeatherMockup.vue`       | **[Mockup 추가] 주간 예보 블록** — 도시별 `forecast` 배열을 확장하고 **중첩 `v-for`**(도시 → 요일)로 렌더링. 카드 선택 상태와 연동해 선택된 도시의 5일 예보만 노출                         |
 | Hands on 1         | `WeatherMockup.vue`       | **상태바 조사 자동 판별** — 한글 음절 코드의 받침 유무를 계산해 `이`/`가`를 선택 (서울**이** / 제주**가**)                                                                                 |
+| Hands on 2         | `WeatherComposition.vue`  | **`selectedCity` computed 도입** — 1일차에는 `template v-for` + `v-if`로 5개 도시를 훑어 선택 도시를 찾았으나, computed로 추출해 순회를 제거하고 템플릿을 단순화                           |
+| Hands on 2         | `WeatherComposition.vue`  | **`weatherSummary` computed 체이닝** — `filteredWeatherList`에 의존하여 표시 건수·평균 기온·최고/최저 도시를 실시간 요약                                                                   |
+| Hands on 2         | `WeatherComposition.vue`  | **최근 검색어 이력** — 추가 반응형 상태(`searchHistory`)를 두고, `filteredWeatherList`를 감시하는 `watch`에서 결과가 있는 검색어만 중복 없이 5건까지 수집. 칩을 클릭하면 재검색            |
+| Hands on 2         | `WeatherComposition.vue`  | 대기질 블록도 **검색 필터 결과에 연동**하여 검색한 도시의 미세먼지만 표시                                                                                                                  |
 
 ## 배포
 
