@@ -136,12 +136,15 @@ cp src/App.vue.exercise src/App.vue
 
 ### 7. Vue Components — Lifecycle
 
-| 컴포넌트               | 학습 내용                                                                                                                            |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `LifecycleParent.vue`  | `v-if` 토글로 자식 컴포넌트를 생성·파괴하며 훅 실행 순서 관찰                                                                        |
-| `LifecycleChild.vue`   | `setup` → `onBeforeMount` → `onMounted` → `onBeforeUpdate` → `onUpdated` → `onBeforeUnmount` → `onUnmounted` 전체 흐름과 타이머 정리 |
-| `PropsEmitsParent.vue` | 부모 → 자식 props 전달, 자식 이벤트 수신 및 페이로드 처리                                                                            |
-| `PropsEmitsChild.vue`  | `defineProps` 유효성 검사, `defineEmits`로 커스텀 이벤트 발신                                                                        |
+| 컴포넌트                                         | 학습 내용                                                                                                                            |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `LifecycleParent.vue`                            | `v-if` 토글로 자식 컴포넌트를 생성·파괴하며 훅 실행 순서 관찰                                                                        |
+| `LifecycleChild.vue`                             | `setup` → `onBeforeMount` → `onMounted` → `onBeforeUpdate` → `onUpdated` → `onBeforeUnmount` → `onUnmounted` 전체 흐름과 타이머 정리 |
+| `PropsEmitsParent.vue`                           | 부모 → 자식 props 전달, 자식 이벤트 수신 및 페이로드 처리                                                                            |
+| `PropsEmitsChild.vue`                            | `defineProps` 유효성 검사, `defineEmits`로 커스텀 이벤트 발신                                                                        |
+| `SlotDefaultParent.vue` / `SlotDefaultChild.vue` | Default Slot — 이름 없는 `<slot>`과 기본 콘텐츠                                                                                      |
+| `SlotNamedParent.vue` / `SlotNamedChild.vue`     | Named Slot — `<slot name>`과 `v-slot:name`으로 위치 지정                                                                             |
+| `SlotScopedParent.vue` / `SlotScopedChild.vue`   | Scoped Slot — 자식 데이터를 `v-slot`으로 부모에 전달                                                                                 |
 
 ### 종합과제
 

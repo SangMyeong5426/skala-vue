@@ -35,6 +35,9 @@ import StyleScoped from '@/components/practices/basic/StyleScoped.vue'
 // 7. Vue Components - Lifecycle
 import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
 import PropsEmitsParent from '@/components/practices/component/PropsEmitsParent.vue'
+import SlotDefaultParent from '@/components/practices/component/SlotDefaultParent.vue'
+import SlotNamedParent from '@/components/practices/component/SlotNamedParent.vue'
+import SlotScopedParent from '@/components/practices/component/SlotScopedParent.vue'
 
 // 6. Composition API - Computed & Watchers
 import ComputedBasic from '@/components/practices/composition/ComputedBasic.vue'
@@ -98,5 +101,8 @@ import WatchersWatchEffect from '@/components/practices/composition/WatchersWatc
     <hr />
     <LifecycleParent />
     <PropsEmitsParent />
+    <SlotDefaultParent />
+    <SlotNamedParent />
+    <SlotScopedParent />
   </div>
 </template>
