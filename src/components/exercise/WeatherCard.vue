@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 4] 선택된 도시 객체를 전달받아 표시하고(props),
+// 선택된 도시 객체를 전달받아 표시하고(props),
 import { computed } from 'vue'
 import { getWeatherIcon } from './weatherIcons'
 import { evaluateMosquito } from './mosquitoScore'

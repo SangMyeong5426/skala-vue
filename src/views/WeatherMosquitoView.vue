@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 6] 본인 추가 View — 모기활동지수 랭킹
+// 도시별 모기활동지수를 점수순으로 비교하는 랭킹 화면
 import { computed, onMounted } from 'vue'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { evaluateMosquito, MOSQUITO_GRADES } from '@/components/exercise/mosquitoScore'

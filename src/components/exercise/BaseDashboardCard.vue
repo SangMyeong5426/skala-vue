@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 2] 검색박스와 리스트박스의 디자인을 공통화한 껍데기 컴포넌트.
+// 검색박스와 리스트박스의 디자인을 공통화한 껍데기 컴포넌트.
 import { ref } from 'vue'
 
 defineProps({

@@ -30,7 +30,7 @@ export const useWeatherStore = defineStore('weather', () => {
     lastUpdatedAt.value ? lastUpdatedAt.value.toLocaleTimeString('ko-KR') : '–',
   )
 
-  // [요구사항 2] 전체 도시 실시간 조회 — 기본 도시 + 사용자가 추가한 도시
+  // 전체 도시 실시간 조회 — 기본 도시 + 사용자가 추가한 도시
   async function fetchAll() {
     isLoading.value = true
     errorMessage.value = ''
@@ -61,7 +61,7 @@ export const useWeatherStore = defineStore('weather', () => {
     await fetchAll()
   }
 
-  // [요구사항 3] 상세 페이지 단건 조회.
+  // 상세 페이지 단건 조회.
   async function loadCityDetail(cityId) {
     try {
       const detail = await fetchCityById(cityId)

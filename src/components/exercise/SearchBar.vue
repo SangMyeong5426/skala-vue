@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 3] 검색 입력 컴포넌트.
+// 검색 입력 컴포넌트.
 import { ref } from 'vue'
 import { useWeatherStore } from '@/stores/weatherStore'
 
@@ -59,7 +59,7 @@ const isAlreadyAdded = (place) => weatherStore.cities.some((city) => city.id ===
   <div class="search-bar">
     <div class="input-wrap">
       <span class="input-icon">🔍</span>
-      <!-- [요구사항 1] v-model 대신 :value + @input.
+      <!-- v-model 대신 :value + @input.
            한글은 조합 중에도 input 이벤트가 발생해 목록 필터가 즉시 반응한다.
            도시 검색은 여기서 부르지 않고 엔터/버튼에서만 부른다. -->
       <input
@@ -132,7 +132,7 @@ const isAlreadyAdded = (place) => weatherStore.cities.some((city) => city.id ===
 .hint-line strong {
   color: var(--ink-soft);
 }
-/* [요구사항 5] exercise.css에 있던 input 규칙을 이 컴포넌트로 옮겨 왔다 */
+/* 검색창 스타일은 공용 CSS가 아니라 이 컴포넌트가 갖는다 */
 .input-wrap {
   display: flex;
   align-items: center;

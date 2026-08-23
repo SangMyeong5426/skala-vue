@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 7 - 추가 Component] 선택된 도시의 5일 예보.
+// 선택된 도시의 5일 예보.
 import { computed } from 'vue'
 import { getWeatherIcon } from './weatherIcons'
 import { evaluateMosquito } from './mosquitoScore'

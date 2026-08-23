@@ -15,7 +15,7 @@ const configStore = useConfigStore()
 </template>
 
 <style scoped>
-/* [요구사항 5] 컴포넌트 스타일은 이 파일 안에서만 관리한다.
+/* 컴포넌트 스타일은 이 파일 안에서만 관리한다.
    내비게이션 바가 flex라 margin-left: auto로 우측 끝에 붙인다. */
 .unit-toggler {
   display: inline-flex;

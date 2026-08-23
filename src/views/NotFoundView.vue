@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 1] Catch-all Route가 가리키는 화면
+// Catch-all Route가 가리키는 화면
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()

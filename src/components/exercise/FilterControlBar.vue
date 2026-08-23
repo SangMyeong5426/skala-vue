@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 7 - 추가 Component] 정렬 기준 / 즐겨찾기 필터 컨트롤 바.
+// 정렬 기준 / 즐겨찾기 필터 컨트롤 바.
 defineProps({
   sortKey: {
     type: String,

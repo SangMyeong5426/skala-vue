@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 4] 지역별 상세 기상 관측 정보 페이지
+// 지역별 상세 기상 관측 정보 페이지
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { isKnownCity } from '@/data/cities'
@@ -80,7 +80,7 @@ const loadCity = async (id) => {
   }
 }
 
-// [요구사항 4] 첫 진입 시 동적 경로의 cityId를 읽어 해당 도시를 조회
+// 첫 진입 시 동적 경로의 cityId를 읽어 해당 도시를 조회
 onMounted(() => {
   loadCity(route.params.cityId)
   console.log(`📄 [onMounted] 상세 페이지 진입 — cityId: ${route.params.cityId}`)
@@ -96,7 +96,7 @@ onBeforeRouteUpdate((to) => {
   return true
 })
 
-// [요구사항 3] Programmatic Navigation — 대시보드에서 왔는지 랭킹에서 왔는지 모르니
+// Programmatic Navigation — 대시보드에서 왔는지 랭킹에서 왔는지 모르니
 // 목적지를 정해 보내지 않고 방문 기록을 한 칸 되돌린다
 const goBack = () => router.back()
 </script>

@@ -1,5 +1,5 @@
 <script setup>
-// [요구사항 7 - 추가 Component] 대기질(PM10) 현황.
+// 대기질(PM10) 현황.
 defineProps({
   cities: {
     type: Array,

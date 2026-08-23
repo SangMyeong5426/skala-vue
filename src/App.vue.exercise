@@ -26,7 +26,7 @@ onMounted(() => {
         </span>
       </RouterLink>
 
-      <!-- [요구사항 2] Navigation Bar — RouterLink는 <a>로 렌더되지만
+      <!-- Navigation Bar — RouterLink는 <a>로 렌더되지만
            서버에 새 페이지를 요청하지 않고 라우터가 화면만 갈아 끼운다.
            현재 경로와 일치하면 router-link-exact-active 클래스가 자동으로 붙는다. -->
       <nav class="navigation-bar">
@@ -35,11 +35,11 @@ onMounted(() => {
         <RouterLink to="/mosquito" class="nav-item">도시 랭킹</RouterLink>
       </nav>
 
-      <!-- [요구사항 2] 단위 전환 스위치 — 어느 페이지에 있든 항상 보이도록 뼈대에 둔다 -->
+      <!-- 단위 전환 스위치 — 어느 페이지에 있든 항상 보이도록 뼈대에 둔다 -->
       <UnitToggler />
     </header>
 
-    <!-- [요구사항 2] 메인 콘텐츠 영역 — 경로에 매칭된 View가 이 자리에 렌더된다 -->
+    <!-- 메인 콘텐츠 영역 — 경로에 매칭된 View가 이 자리에 렌더된다 -->
     <main class="app-main">
       <RouterView />
     </main>

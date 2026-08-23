@@ -97,7 +97,7 @@ const fetchCityBundle = async (city) => {
   }
 }
 
-// [요구사항 2] 전체 도시를 병렬로 조회 — 5개 도시를 순차로 돌면 5배 느리다.
+// 전체 도시를 병렬로 조회 — 5개 도시를 순차로 돌면 5배 느리다.
 export const fetchAllCities = async () => {
   if (!hasApiKey()) {
     throw new Error('VITE_OPENWEATHER_API_KEY가 없습니다. .env.local을 확인하세요.')
@@ -136,7 +136,7 @@ export const fetchCityByCoords = async (city) => {
   return fetchCityBundle(city)
 }
 
-// [요구사항 3] 상세 페이지용 단건 조회
+// 상세 페이지용 단건 조회
 export const fetchCityById = async (cityId) => {
   const city = parseCityId(cityId)
   if (!city) return null

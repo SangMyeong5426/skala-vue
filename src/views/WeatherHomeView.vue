@@ -175,7 +175,7 @@ const handleSelectCard = (city) => {
   selectedCityInfo.value = `${city.name}${getSubjectJosa(city.name)} 선택되었습니다.`
 }
 
-// [요구사항 3] WeatherCard의 click-detail 수신
+// WeatherCard의 click-detail 수신
 const handleDetailJump = (city) => {
   router.push(`/weather/${city.id}`)
 }
@@ -368,7 +368,7 @@ const handleDetailJump = (city) => {
     position: static;
   }
 }
-/* [요구사항 5] exercise.css에 있던 상태 바 스타일을 이 View로 이동 */
+/* 상태 바 스타일은 이 화면에서만 쓰이므로 여기에 둔다 */
 .status-bar {
   padding: 11px;
   text-align: center;
