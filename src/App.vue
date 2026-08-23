@@ -1,22 +1,49 @@
 <script setup>
-/**
- * 화면: 📚 단원별 실습 (1~7단원)
- *
- * 이 프로젝트는 App.vue 를 교체해 화면을 전환한다.
- *   cp src/App.vue.practice src/App.vue   → 실습 화면
- *   cp src/App.vue.exercise src/App.vue   → 종합과제 화면
- *
- * 보관본(App.vue.practice / App.vue.exercise)은 확장자가 .vue 가 아니므로
- * Vite 빌드와 ESLint 검사 대상에서 제외된다.
- */
-import PracticeView from './views/PracticeView.vue'
+import { onMounted } from 'vue'
+import mosquitoIcon from '@/assets/mosquito.png'
+import { RouterLink, RouterView } from 'vue-router'
+
+import UnitToggler from '@/components/exercise/UnitToggler.vue'
+import { useConfigStore } from '@/stores/configStore'
+
+const configStore = useConfigStore()
+
+onMounted(() => {
+  configStore.restoreUnit()
+})
 </script>
 
 <template>
-  <PracticeView />
+  <div class="app-shell">
+    <header class="app-header">
+      <RouterLink to="/" class="brand">
+        <img class="brand-mark" :src="mosquitoIcon" alt="" />
+        <span class="brand-text">
+          <strong>모기 예보</strong>
+          <small>실시간 기상 데이터로 계산하는 모기활동지수</small>
+        </span>
+      </RouterLink>
+
+      <!-- [요구사항 2] Navigation Bar — RouterLink는 <a>로 렌더되지만
+           서버에 새 페이지를 요청하지 않고 라우터가 화면만 갈아 끼운다.
+           현재 경로와 일치하면 router-link-exact-active 클래스가 자동으로 붙는다. -->
+      <nav class="navigation-bar">
+        <RouterLink to="/" class="nav-item">소개</RouterLink>
+        <RouterLink to="/dashboard" class="nav-item">대시보드</RouterLink>
+        <RouterLink to="/mosquito" class="nav-item">도시 랭킹</RouterLink>
+      </nav>
+
+      <!-- [요구사항 2] 단위 전환 스위치 — 어느 페이지에 있든 항상 보이도록 뼈대에 둔다 -->
+      <UnitToggler />
+    </header>
+
+    <!-- [요구사항 2] 메인 콘텐츠 영역 — 경로에 매칭된 View가 이 자리에 렌더된다 -->
+    <main class="app-main">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style>
-/* 실습 화면 전용 스타일 */
-@import '@/assets/practice.css';
+@import '@/assets/exercise.css';
 </style>
