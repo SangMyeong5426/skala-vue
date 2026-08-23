@@ -1,9 +1,7 @@
 <script setup>
-// 1. 학습환경구성
 import SampleOne from '@/components/practices/basic/SampleOne.vue'
 import SampleTwo from '@/components/practices/basic/SampleTwo.vue'
 
-// 2. Vue Directive
 import VueHtml from '@/components/practices/basic/VueHtml.vue'
 import VueHtmlXss from '@/components/practices/basic/VueHtmlXss.vue'
 import VueText from '@/components/practices/basic/VueText.vue'
@@ -19,33 +17,33 @@ import VueCloak from '@/components/practices/basic/VueCloak.vue'
 import VueOnce from '@/components/practices/basic/VueOnce.vue'
 import VueMemo from '@/components/practices/basic/VueMemo.vue'
 
-// 3. Vue Event Handling
 import EventBasic from '@/components/practices/basic/EventBasic.vue'
 import EventObject from '@/components/practices/basic/EventObject.vue'
 import EventModifier from '@/components/practices/basic/EventModifier.vue'
 
-// 4. Vue Form Handling
 import ModelBasic from '@/components/practices/basic/ModelBasic.vue'
 import ModelForm from '@/components/practices/basic/ModelForm.vue'
 import ModelModifier from '@/components/practices/basic/ModelModifier.vue'
 
-// 5. Vue Style Handling
 import StyleScoped from '@/components/practices/basic/StyleScoped.vue'
 
-// 7. Vue Components - Lifecycle
-import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
-import PropsEmitsParent from '@/components/practices/component/PropsEmitsParent.vue'
-import SlotDefaultParent from '@/components/practices/component/SlotDefaultParent.vue'
-import SlotNamedParent from '@/components/practices/component/SlotNamedParent.vue'
-import SlotScopedParent from '@/components/practices/component/SlotScopedParent.vue'
-
-// 6. Composition API - Computed & Watchers
 import ComputedBasic from '@/components/practices/composition/ComputedBasic.vue'
 import WatchersBasic from '@/components/practices/composition/WatchersBasic.vue'
 import WatchersMulti from '@/components/practices/composition/WatchersMulti.vue'
 import WatchersDeep from '@/components/practices/composition/WatchersDeep.vue'
 import WatchersReactive from '@/components/practices/composition/WatchersReactive.vue'
 import WatchersWatchEffect from '@/components/practices/composition/WatchersWatchEffect.vue'
+
+import LifecycleParent from '@/components/practices/component/LifecycleParent.vue'
+import PropsEmitsParent from '@/components/practices/component/PropsEmitsParent.vue'
+import SlotDefaultParent from '@/components/practices/component/SlotDefaultParent.vue'
+import SlotNamedParent from '@/components/practices/component/SlotNamedParent.vue'
+import SlotScopedParent from '@/components/practices/component/SlotScopedParent.vue'
+
+import StoreCounter from '@/components/practices/library/StoreCounter.vue'
+
+import AxiosWeather from '@/components/practices/library/AxiosWeather.vue'
+import AxiosJson from '@/components/practices/library/AxiosJson.vue'
 </script>
 
 <template>
@@ -104,5 +102,14 @@ import WatchersWatchEffect from '@/components/practices/composition/WatchersWatc
     <SlotDefaultParent />
     <SlotNamedParent />
     <SlotScopedParent />
+
+    <h1>8. Vue Library (Store)</h1>
+    <hr />
+    <StoreCounter />
+
+    <h1>9. Axios</h1>
+    <hr />
+    <AxiosWeather />
+    <AxiosJson />
   </div>
 </template>
