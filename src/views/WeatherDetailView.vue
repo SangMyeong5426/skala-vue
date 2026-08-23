@@ -7,6 +7,8 @@ import { getWeatherIcon } from '@/components/exercise/weatherIcons'
 import { useConfigStore } from '@/stores/configStore'
 import { useWeatherStore } from '@/stores/weatherStore'
 import { evaluateMosquito } from '@/components/exercise/mosquitoScore'
+import { getActiveHours } from '@/components/exercise/activeHours'
+import { fetchSunTimes } from '@/api/sunApi'
 import mosquitoIcon from '@/assets/mosquito.png'
 
 const route = useRoute()
@@ -15,7 +17,10 @@ const configStore = useConfigStore()
 const weatherStore = useWeatherStore()
 
 const cityData = ref(null)
+const sunTimes = ref(null)
 const isLoading = ref(false)
+
+const activeHours = computed(() => getActiveHours(sunTimes.value))
 
 const displayTemp = computed(() => configStore.toDisplayTemp(cityData.value?.temp))
 const displayFeelsLike = computed(() => configStore.toDisplayTemp(cityData.value?.feelsLike))
@@ -58,10 +63,20 @@ const loadCity = async (id) => {
     return
   }
   isLoading.value = true
+  sunTimes.value = null
   try {
     cityData.value = await weatherStore.loadCityDetail(id)
   } finally {
     isLoading.value = false
+  }
+
+  // 일출·일몰은 없어도 본문을 보는 데 지장이 없으므로 실패하면 조용히 건너뛴다
+  if (cityData.value) {
+    try {
+      sunTimes.value = await fetchSunTimes(cityData.value)
+    } catch (error) {
+      console.error('🔴 [상세] 일출·일몰 조회 실패:', error)
+    }
   }
 }
 
@@ -119,6 +134,41 @@ const goBack = () => router.back()
         </div>
         <p class="factor-note">{{ f.note }}</p>
       </article>
+    </div>
+
+    <div v-if="activeHours.length" class="info-card sun-card">
+      <h4>🌇 오늘 조심할 시간</h4>
+      <p class="sun-lead">
+        모기는 해 질 무렵과 동틀 무렵에 흡혈 활동이 가장 활발합니다. 오늘
+        {{ cityData.short }}의 일출은 {{ sunTimes.sunriseLabel }}, 일몰은
+        {{ sunTimes.sunsetLabel }}입니다.
+      </p>
+
+      <div class="sun-track">
+        <span
+          v-for="band in activeHours"
+          :key="band.key"
+          class="sun-band"
+          :class="band.key"
+          :style="{ left: band.left + '%', width: band.width + '%' }"
+        ></span>
+      </div>
+      <div class="sun-scale">
+        <span>0시</span>
+        <span>6시</span>
+        <span>12시</span>
+        <span>18시</span>
+        <span>24시</span>
+      </div>
+
+      <ul class="sun-list">
+        <li v-for="band in activeHours" :key="band.key" class="sun-item">
+          <span class="sun-dot" :class="band.key"></span>
+          <span class="sun-label">{{ band.label }}</span>
+          <span class="sun-range">{{ band.range }}</span>
+          <span class="sun-rank">{{ band.rank }}</span>
+        </li>
+      </ul>
     </div>
 
     <div v-if="!isLoading && cityData" class="info-card">
@@ -325,6 +375,76 @@ const goBack = () => router.back()
   color: var(--grade-soft);
   font-weight: 700;
   font-size: 13px;
+}
+/* 오늘 조심할 시간 — 24시간 막대에 활동 구간 두 개를 얹는다 */
+.sun-lead {
+  margin: 0 0 14px !important;
+  line-height: 1.7 !important;
+}
+.sun-track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+.sun-band {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+.sun-band.dusk {
+  background: var(--grade-danger);
+}
+.sun-band.dawn {
+  background: var(--grade-warn);
+}
+.sun-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+  font-size: 10.5px;
+  color: var(--ink-mute);
+}
+.sun-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.sun-item {
+  display: grid;
+  grid-template-columns: 8px auto auto 1fr;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 0;
+  border-top: 1px solid var(--glass-line);
+  font-size: 12.5px;
+}
+.sun-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+.sun-dot.dusk {
+  background: var(--grade-danger);
+}
+.sun-dot.dawn {
+  background: var(--grade-warn);
+}
+.sun-label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.sun-range {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.sun-rank {
+  text-align: right;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-mute);
 }
 .raw-status {
   margin-left: 6px;

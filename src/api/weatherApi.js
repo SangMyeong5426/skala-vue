@@ -80,6 +80,8 @@ const fetchCityBundle = async (city) => {
   const now = current.data
   return {
     id: city.id,
+    lat: city.lat,
+    lon: city.lon,
     short: city.short ?? now.name,
     name: city.name ?? now.name,
     detailName: city.detailName ?? now.name,
