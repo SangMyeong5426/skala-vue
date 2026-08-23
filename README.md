@@ -8,8 +8,8 @@
 
 점수 산출 근거는 서울시 모기예보제와 곤충학 자료를 따랐고, 그 근거를 소개 화면에서 그대로 밝힌다.
 
-- 저장소: (배포 후 기입)
-- 배포 주소: (배포 후 기입)
+- 저장소: https://github.com/SangMyeong5426/skala-vue
+- 배포 주소: https://skala-vue-mauve-seven.vercel.app
 
 ---
 
