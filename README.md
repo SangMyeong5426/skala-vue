@@ -23,6 +23,21 @@
 | `/weather/:cityId` | 지역 상세   | 한 도시의 점수 근거와 관측값, 오늘 조심할 시간대             |
 | 그 외              | 페이지 없음 | 정의되지 않은 경로 처리                                      |
 
+## 기술 구성
+
+Vue 3, Vue Router, Pinia, Axios, Element Plus, Vite.
+날씨는 OpenWeatherMap, 일출·일몰은 sunrise-sunset.org에서 받는다.
+
+```
+src/
+├── api/                  weatherApi.js · sunApi.js
+├── components/exercise/  화면 부품과 산출 규칙
+├── data/                 도시 목록 · 대체 데이터
+├── stores/               weatherStore · configStore
+├── router/               라우트 정의
+└── views/                소개 · 대시보드 · 랭킹 · 상세 · 404
+```
+
 # 개발 과정
 
 처음부터 지금 형태였던 것이 아니라, 화면 하나에서 시작해 기능을 붙이고 구조를 여러 번 갈아엎으며 지금에 도달했다. 아래는 그 순서다.
